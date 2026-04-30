@@ -81,6 +81,11 @@
 	.area 0x4
 		bl CardPullOut
 	.endarea
+	
+	.org PlayTimerTickWrapperCallsite
+    .area 0x4
+        bl YouCanDoAnything
+    .endarea
 .close
 
 .open "overlay34.bin", overlay34_start

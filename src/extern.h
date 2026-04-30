@@ -78,6 +78,7 @@ extern void TextboxTransparent(void);
 extern void GetSceneName(char *dst, char *src);
 extern int CreateLivePerformer(int follow_idx, struct performer_spawn *performer_spawn, int hanger, int sector, bool attribute_flag);
 extern void GetOptionsMenuAllChoices(int window_id, int* buf);
+extern void PlayTimerTickWrapper(void);
 extern struct rgba TEXTBOX_COLOR_ATTRIBUTES;
 extern struct font_data FONT_DATA;
 
@@ -94,6 +95,7 @@ extern SECTION_TEXT_PLAYBILL void CloseEnvelope(void);
 extern SECTION_TEXT_PLAYBILL bool UpdateMysteryMailMenu(void);
 
 extern int last_selected_scene;
+extern bool playing_all_scenes;
 
 //Touchscreen Stuff
 extern uint8_t TSXPosLive;

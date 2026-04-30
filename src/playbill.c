@@ -2,8 +2,6 @@
 #include <cot.h>
 #include "extern.h"
 
-#if CUSTOM_SCRIPT_MENUS
-
 #define MAIN_SIMPLE_MENU GLOBAL_MENU_INFO.window_ids[0]
 #define MAIN_OPTIONS_MENU GLOBAL_MENU_INFO.window_ids[3]
 
@@ -82,6 +80,7 @@ SECTION_TEXT_PLAYBILL void CreateYesNoSubMenu(void) {
 }
 
 SECTION_TEXT_PLAYBILL void ClosePlaybill(void) {
+    playing_all_scenes = false; // Just to be extra sure lol
     if(SCENE_SELECTOR_ADV_MENU >= 0)
         CloseAdvancedMenu(SCENE_SELECTOR_ADV_MENU);
     if(SCENE_SELECTOR_PARTICIPANT_LISTING >= 0)
@@ -192,6 +191,7 @@ SECTION_TEXT_PLAYBILL void CreateEnvelope(void) {
 }
 
 SECTION_TEXT_PLAYBILL void CloseEnvelope(void) {
+    playing_all_scenes = GLOBAL_MENU_INFO.return_val == 1;
     if(MAIN_SIMPLE_MENU >= 0)
         CloseSimpleMenu(MAIN_SIMPLE_MENU);
     if(MAIN_OPTIONS_MENU >= 0)
@@ -262,6 +262,4 @@ SECTION_TEXT_PLAYBILL bool UpdateMysteryMailMenu(void) {
     }
     return false;
 }
-#endif
-
 #endif

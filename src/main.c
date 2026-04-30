@@ -2,6 +2,9 @@
 #include <cot.h>
 #include "extern.h"
 
+int participant_popup_timer = -1;
+int participant_popup_window_id = -1;
+
 uint16_t text_numerator = 1;
 uint16_t text_denominator = 1;
 uint16_t text_count = 0;
@@ -13,14 +16,40 @@ void ResetTextSpeedValues(void) {
 }
 
 /*
+	Creates the participant popup window that shows when a scene begins only when selecting Play All Scenes.
+*/
+void CreateParticipantPopup(void) {
+	int scene_number = last_selected_scene;
+	char* participant_string;
+	char popup_message[0x200];
+	if(scene_number == 0)
+		strncpy(popup_message, "[UNK:0][FT:1][CN]Ｉｎｉｔｉａｌ　Ｓｃｅｎｅ\n[UNK:1][FT:0][CN]", sizeof(popup_message));
+	else
+		sprintf(popup_message, "[UNK:0][FT:1][CN]Ｓｃｅｎｅ　%d\n[UNK:1][FT:0][CN]", scene_number);
+	struct window_params window_params = { .x_offset = 0x1, .y_offset = 0x1, .width = 0x1E, .height = 0x4, .screen = {SCREEN_MAIN}, .box_type = {0xFC} };
+	struct preprocessor_flags preprocessor_flags = {.flags_1 = 0b000000010, .timer_2 = true};
+	participant_string = StringFromId(scene_number+TEXT_STRING_PARTICIPANT_NAME_START);
+	// This never really runs for MMR, but whatever, leftover code go brr
+	for(int i = 0; i < strlen(participant_string); i++) {
+		if(participant_string[i] == '\n')
+			participant_string[i] = ' ';
+	}
+	strcat(popup_message, participant_string);
+	if(participant_popup_timer < 0)
+		participant_popup_window_id = CreateDialogueBox(&window_params);
+	ShowStringInDialogueBox(participant_popup_window_id, preprocessor_flags, popup_message, NULL);
+	participant_popup_timer = 480;
+}
+
+/*
 	Hijacks the scene name of "DECOI" to instead load a scene name based off the result of Message Menu 80.
 	Also resets some shared variables to their default values.
 */
 __attribute((used)) void CustomGetActingSceneName(char* truncated_scene_name, char* full_scene_name) {
 	GetSceneName(truncated_scene_name, full_scene_name);
-	if (strncmp(truncated_scene_name, "DECOI", 8) != 0)
+	if(strncmp(truncated_scene_name, "DECOI", 8) != 0)
 		return;
-	if (last_selected_scene == 0)
+	if(last_selected_scene == 0)
 		strncpy(truncated_scene_name, "initial", 8);
 	else
 		snprintf(truncated_scene_name, 8, "%02d", last_selected_scene);
@@ -29,12 +58,14 @@ __attribute((used)) void CustomGetActingSceneName(char* truncated_scene_name, ch
 	// Reset the SCENARIO_SUB variables...
 	// SkyTemple's debugger actually raises errors for out-of-bounds indexing, so just play nicely.
 	uint8_t* buffer = (uint8_t*)&(DIALOGUE_BOX_DEFAULT_WINDOW_PARAMS.x_offset);
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 2; j++) {
+	for(int i = 0; i < 3; i++) {
+		for(int j = 0; j < 2; j++) {
 			SaveScriptVariableValueAtIndex(NULL, VAR_SCENARIO_SUB1+i, j, *buffer);
 			buffer++;
 		}
 	}
+	if(playing_all_scenes)
+		CreateParticipantPopup();
 }
 
 /*
@@ -44,7 +75,7 @@ __attribute((used)) int CustomCreateDialogueBox(struct window_params* window_par
 	struct window_params new_params;
 	if (GetPerformanceFlagWithChecks(62)) {
 		uint8_t* buffer = (uint8_t*)&(new_params.x_offset);
-		for (int i = 0; i < 6; i++)
+		for(int i = 0; i < 6; i++)
 			buffer[i] = LoadScriptVariableValueAtIndex(NULL, VAR_SCENARIO_SUB1, i); // Intentional out-of-bounds indexing, yay!
 		window_params = &new_params;
 	}
@@ -57,7 +88,7 @@ __attribute((used)) int CustomCreateDialogueBox(struct window_params* window_par
 */
 __attribute((used)) int CustomCreatePortraitBox(enum screen screen, uint32_t palette_idx, bool framed) {
 	enum screen new_screen = screen;
-	if (GetPerformanceFlagWithChecks(62))
+	if(GetPerformanceFlagWithChecks(62))
 		new_screen = LoadScriptVariableValueAtIndex(NULL, VAR_SCENARIO_SUB3, 0);
 	return CreatePortraitBox(new_screen, palette_idx, framed);
 }
@@ -92,7 +123,8 @@ void SwapFont(const char* filepath, bool swap_unkno) {
 		- "VS:X:Y" ("VITESSE") modifies text speed by X/Y. For example, "[VS:1:2]" halves speed, but "[VS:4]" quadruples it. The second parameter is optional, and if missing, will default to 1.
 		- "VR" reverts text speed to normal (equivalent to "[VS:1:1]" and "[VS:1]").
 		- "VAR:X:Y:Z" ("VARIABLE") sets script variable X at index Z to the value Y. The third parameter is optional, and if missing, will default to 0.
-		- "U:X" ("UNLOCK") unlocks the the Xth scripting lock. 
+		- "U:X" ("UNLOCK") unlocks the the Xth scripting lock.
+		- "UNK" swaps the unkno_rd.dat font for kanji_jp.dat.
 		
 	To ignore a text tag in a textbox that doesn't scroll, check for dialogue_display_state::flags.timer_2.
 */
@@ -134,6 +166,13 @@ __attribute((used)) bool ParseCustomUppercaseTextTags(struct dialogue_display_st
 		}
 		return true;
 	}
+	else if(StrcmpTag(tag, "UNK")) {
+		if(tag_param_count > 0) {
+			char* font = tag_vals[0] == 0 ? "FONT/kanji_jp.dat" : "FONT/unkno_rd.dat";
+			SwapFont(font, true);
+		}
+		return true;
+	}
 	else if(StrcmpTag(tag, "U")) {
 		if(state->flags.timer_2)
 			return true;
@@ -142,6 +181,20 @@ __attribute((used)) bool ParseCustomUppercaseTextTags(struct dialogue_display_st
 		return true;
 	}
 	return false;
+}
+
+/*
+	Some generic function that runs every frame in Ground Mode.
+*/
+__attribute((used)) void YouCanDoAnything(void) {
+	PlayTimerTickWrapper();
+	if(participant_popup_timer >= 0) {
+        if(participant_popup_timer == 0 && participant_popup_window_id >= 0) {
+            CloseDialogueBox(participant_popup_window_id);
+			participant_popup_window_id = -1;
+		}
+        participant_popup_timer--;
+    }
 }
 
 __attribute((used)) uint32_t TryChangeTextSpeed(struct dialogue_display_state* state) {

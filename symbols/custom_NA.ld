@@ -15,6 +15,7 @@ DefaultActorTypeBranch = 0x022F80D0;
 ShouldReloadCachedScene = 0x022E573C;
 CreateSaveMenuCallsite = 0x022E670C;
 CreateDayCareMenuCallsite = 0x022E63D0;
+PlayTimerTickWrapperCallsite = 0x022E8E2C;
 
 /* !file arm9 */
 ShowKeyboardTypeCase3 = 0x02036914;
@@ -42,6 +43,7 @@ PlayBgm2ByIdVolumeVeneer = 0x02017BE0;
 ChangeSeVolumeVeneer = 0x020183A0;
 SoundStop = 0x02017AB0;
 GetOptionsMenuAllChoices = 0x0202d5b0;
+PlayTimerTickWrapper = 0x0204f9cc;
 TEXTBOX_COLOR_ATTRIBUTES = 0x02027800;
 
 /* PERSONALITY */

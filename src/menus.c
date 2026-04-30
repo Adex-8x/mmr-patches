@@ -2,9 +2,8 @@
 #include <cot.h>
 #include "extern.h"
 
-#if CUSTOM_SCRIPT_MENUS
-
 int last_selected_scene = 0;
+bool playing_all_scenes = false;
 
 // The initial menu function called to show a keyboard prompt for the player to type in a string.
 // This is intended to be used by a variety of menus.
@@ -68,5 +67,3 @@ __attribute((used)) struct custom_menu CUSTOM_MENUS[] = {
 
 struct global_menu_info GLOBAL_MENU_INFO;
 const int CUSTOM_MENU_AMOUNT = ARRAY_LENGTH(CUSTOM_MENUS);
-
-#endif

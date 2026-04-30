@@ -5,8 +5,6 @@
 
 // Loosely based on https://github.com/Adex-8x/mm5-patches/blob/main/src/menus.c
 
-#if CUSTOM_SCRIPT_MENUS
-
 // const instead of #define so the constant can be referenced in Assembly
 __attribute((used)) const int FIRST_CUSTOM_SCRIPT_MENU = 80;
 
@@ -98,5 +96,3 @@ __attribute((used)) bool DispatchCustomScriptMenu(int menu_id, int* return_val) 
     }
     return is_menu_finished;
 }
-
-#endif
