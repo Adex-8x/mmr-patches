@@ -3,11 +3,11 @@
 #include <pmdsky.h>
 #include <cot.h>
 
-#define EVENT_FINISHED 0
+#define EVENT_FINISHED 1
 #define SECTION_TEXT_PLAYBILL __attribute__((section(".text.playbill"))) __attribute((used))
 #define SECTION_DATA_PLAYBILL __attribute__((section(".data.playbill"))) __attribute((used))
 
-#define TOTAL_SCENES 16 // 15 participant scenes, 1 initial
+#define TOTAL_SCENES 15 // 14 participant scenes, 1 initial
 #define TEXT_STRING_SCENE_SELECTOR_TITLE 8735
 #define TEXT_STRING_MYSTERYMAIL_BLURB 8736
 #define TEXT_STRING_PARTICIPANT_NAME_START 8737

@@ -119,6 +119,13 @@ bool CustomScriptSpecialProcessCall(struct script_routine* routine, uint32_t spe
           break;
       }
       return true;
+    case 107:
+      *return_val = last_selected_scene;
+      return true;
+    case 108:
+      last_selected_scene++;
+      *return_val = 0;
+      return true;
     default:
       return false;
   }
