@@ -49,6 +49,11 @@
 	.area 0x4
 		bl HijackTextLoop
 	.endarea
+	
+	.org ExtraFontSwitchDefaultCase
+	.area 0x4
+		b TryParseExtraFontNumber
+	.endarea
 .close
 
 .open "overlay11.bin", overlay11_start
@@ -86,6 +91,18 @@
     .area 0x4
         bl YouCanDoAnything
     .endarea
+.close
+
+.open "overlay28.bin", overlay28_start
+    .org CREDITS_SCROLL_SPEED+0x1
+    .area 0x1
+        .byte 0x62
+    .endarea
+	
+	.org CREDITS_FINAL_STRING_ID
+	.area 0x4
+		.word 0x454F
+	.endarea
 .close
 
 .open "overlay34.bin", overlay34_start

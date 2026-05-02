@@ -44,7 +44,14 @@ ChangeSeVolumeVeneer = 0x020183A0;
 SoundStop = 0x02017AB0;
 GetOptionsMenuAllChoices = 0x0202d5b0;
 PlayTimerTickWrapper = 0x0204f9cc;
+ExtraFontSwitchDefaultCase = 0x02026d74;
+ExtraFontReturnSix = 0x02026e10;
+ExtraFontDoRendering = 0x02026e18;
 TEXTBOX_COLOR_ATTRIBUTES = 0x02027800;
+
+/* !file overlay28 */
+CREDITS_FINAL_STRING_ID = 0x0238ad2c;
+CREDITS_SCROLL_SPEED = 0x0238ad0c;
 
 /* PERSONALITY */
 FadeOutBgm = 0x2017F28; /* EU: 0x2017FC4 */ 

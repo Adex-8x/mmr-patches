@@ -203,6 +203,10 @@ __attribute((used)) uint32_t TryChangeTextSpeed(struct dialogue_display_state* s
 	return (uint32_t)result;
 }
 
+__attribute((used)) uint16_t GetExtraFontNumberIndex(char symbol) {
+	return ('0' <= symbol && symbol <= '9') ? (0x40 + (symbol-'0')) : 0;
+}
+
 __attribute((naked)) void HijackTextSpeed(void) {
 	asm("mov r0,r4");
 	asm("b TryChangeTextSpeed");
@@ -215,4 +219,14 @@ __attribute((naked)) void HijackTextLoop(void) {
 	// Per the original comment: "Here is the fun part"
 	asm("mov r0,#0x0");
 	asm("b AnalyzeTextReturn");
+}
+
+__attribute((naked)) void TryParseExtraFontNumber(void) {
+	asm("push {r0-r2}");
+	asm("mov r0,r3");
+	asm("bl GetExtraFontNumberIndex");
+	asm("movs r3,r0");
+	asm("pop {r0-r2}");
+	asm("bne ExtraFontDoRendering");
+	asm("b ExtraFontReturnSix");
 }
