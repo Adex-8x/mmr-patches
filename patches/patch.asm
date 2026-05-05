@@ -101,7 +101,7 @@
 	
 	.org CREDITS_FINAL_STRING_ID
 	.area 0x4
-		.word 0x454F
+		.word 0x4550
 	.endarea
 .close
 

@@ -1,7 +1,7 @@
 # mmr-patches
 A collection of custom ARM Assembly and C patches specifically written for a test MysteryMail event.
 
-Honestly, if *you're* a participnt writing custom code for a test event in which you have half the time you normally would, I think you're kinda built different.
+Honestly, if *you're* a participant writing custom code for a test event in which you have half the time you normally would, I think you're kinda built different.
 
 # Slightly edited c-of-time README
 
