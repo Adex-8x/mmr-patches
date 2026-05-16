@@ -12,7 +12,6 @@ out.asm
 *.xdelta
 
 symbols/generated_*.ld
-decoi*
 .gdb*
 
 patches/generated_by_rust.cotpatch

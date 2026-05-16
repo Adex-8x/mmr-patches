@@ -4,6 +4,7 @@
 #include <cot.h>
 
 #define EVENT_FINISHED 1
+#define DECOI_ENABLED 581
 #define SECTION_TEXT_PLAYBILL __attribute__((section(".text.playbill"))) __attribute((used))
 #define SECTION_DATA_PLAYBILL __attribute__((section(".data.playbill"))) __attribute((used))
 

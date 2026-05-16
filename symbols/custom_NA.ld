@@ -89,3 +89,16 @@ TSYPosLive = 0x22A35E0;
 TSPressed = 0x22A35E4;
 TSXPosLastMitDrag = 0x22A35FC;
 TSYPosLastMitDrag = 0x22A3600;
+
+/* FORCEFULLY PASTORALIST */
+DisplayMessage3 = 0x0234D304;
+ResetTextColorPalette = 0x022e0e44;
+ChangeDungeonColors = 0x022f085c;
+FreezeAnim = 0x022f04f0;
+UnfreezeAnim = 0x022f0518;
+SetEntityDirection = 0x02304afc;
+SetColorField = 0x022de47c;
+MoveEntityGraphically = 0x022e1a90;
+LoadDungeonTileset = 0x02336460;
+UpdateTileGraphics = 0x0233665C;
+ShakeScreen = 0x022ECAFC;

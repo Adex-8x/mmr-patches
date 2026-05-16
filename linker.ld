@@ -9,6 +9,12 @@ MEMORY {
         /* NEW    : ORIGIN = 0x2000000, LENGTH = 0x800 */
         
         scene_selector : ORIGIN = 0x238A140, LENGTH = 0x24A0
+        create_main_menu    : ORIGIN = 0x23310E8, LENGTH = 0x1A0
+        update_main_menu    : ORIGIN = 0x2331788, LENGTH = 0x650
+        data_main_menu      : ORIGIN = 0x233250C, LENGTH = 0x29C6
+        displayui           : ORIGIN = 0x2335A14, LENGTH = 0x6E8
+        helpers             : ORIGIN = 0x22DF814, LENGTH = 0x500
+        chains              : ORIGIN = 0x2382820, LENGTH = 0x7A34
 }
 
 SECTIONS {
@@ -29,6 +35,30 @@ SECTIONS {
                 *(.text.playbill)
                 *(.data.playbill)
         } >scene_selector = 0xff
+        
+        .text.ov.1.CREATETOPMENU : {
+                *(.CREATE)
+        } >create_main_menu = 0xff
+
+        .text.ov.1.UPDATETOPMENU : {
+                *(.UPDATE)
+        } >update_main_menu = 0xff
+
+        .text.ov.1.DATATOPMENU : {
+                *(.PAIN)
+        } >data_main_menu = 0xff
+        
+        .text.ov.29.displayui : {
+                *(.text.dungeon)
+        } >displayui = 0xff
+        
+        .text.ov.29.helpers : {
+                *(.text.dungeon_helper)
+        } >helpers = 0xff
+        
+        .text.ov.31.chains : {
+                *(.data.chains)
+        } >chains = 0xff
         
         
         /*
